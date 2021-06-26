@@ -1,10 +1,13 @@
 package br.com.ceolato.cursomc.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.ceolato.cursomc.domain.Categoria;
 import br.com.ceolato.cursomc.repositories.CategoriaRepository;
+import br.com.ceolato.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class CategoriaService {
@@ -13,7 +16,9 @@ public class CategoriaService {
 	private CategoriaRepository categoriaRepository;
 	
 	public Categoria buscar(Integer id) {
-		return categoriaRepository.findById(id).orElse(null);
+		Optional<Categoria> obj = categoriaRepository.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName()));
 	}
 	
 }
